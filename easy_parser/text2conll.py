@@ -19,7 +19,7 @@ def csv2conll(csvfile: str, fileout: str, lang: str, doc_col: str,
             tagger = Tagger(lang)
             with codecs.open(fileout, 'w', 'utf8') as writer:
                 id_doc = list(zip(ids, docs))
-                if verbose: id_doc = tqdm(id_doc, desc="documets parsed:")
+                if verbose: id_doc = tqdm(id_doc, desc="documents parsed:")
                 for id, doc in id_doc:
                     head = "# newdoc id = {}\n".format(id)
                     sents = doc.split('\n')
