@@ -8,8 +8,7 @@ from .tagger import Tagger
 DEFAULT = {'sep': ';'}
 
 def csv2conll(csvfile: str, fileout: str, lang: str, doc_col: str,  
-              id_col: str = None, verbose=False, csvparams=DEFAULT):
-            
+              id_col: str = None, verbose=False, csvparams=DEFAULT):      
             df = pd.read_csv(csvfile, **csvparams)
             docs = df[doc_col]
             if id_col:
@@ -29,5 +28,13 @@ def csv2conll(csvfile: str, fileout: str, lang: str, doc_col: str,
                     writer.write(head + conll)
 
 
-            
-
+def lines2conll(txtfile: str, fileout: str, lang: str, encoding="utf8", 
+                verbose=False):
+     tagger = Tagger(lang)
+     with codecs.open(txtfile, "r", encoding) as filein:
+          with codecs.open(fileout, "w", "utf8") as writer:
+            if verbose: id_doc = tqdm(filein, desc="documents parsed:")
+            for i, line in enumerate(filein):
+                head = f"# newdoc id = {i}\n"
+                conll = tagger.tag_doc(line.strip()) + "\n"
+                writer.write(head  + conll)
